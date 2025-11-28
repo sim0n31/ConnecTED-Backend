@@ -19,8 +19,7 @@ COPY --from=builder /app/MolinaChirinosTP/target/*.jar app.jar
 
 ENV SPRING_PROFILES_ACTIVE=prod
 
-# 🔥 PUERTO RENDER
-ENV PORT=10000
-EXPOSE 10000
+# Render mapea el puerto, NO SE DEBE SETEAR PORT MANUAL
+EXPOSE 8080
 
 ENTRYPOINT ["java","-jar","/app/app.jar"]
