@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
 @Component
-@Profile("!test")
+@Profile("dev")
 public class DatabaseSeeder implements CommandLineRunner {
 
     private final JdbcTemplate jdbcTemplate;
