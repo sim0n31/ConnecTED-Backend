@@ -4,7 +4,7 @@ FROM eclipse-temurin:17-jdk-alpine AS builder
 WORKDIR /app
 
 # Copiar todo el proyecto
-COPY . .
+COPY MolinaChirinosTP .
 
 # Dar permisos al mvnw (Render usa Linux)
 RUN chmod +x mvnw
