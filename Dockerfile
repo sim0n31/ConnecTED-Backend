@@ -3,13 +3,14 @@ FROM eclipse-temurin:17-jdk-alpine AS builder
 
 WORKDIR /app
 
-# Copiar todo el proyecto
-COPY MolinaChirinosTP .
+# Copiar todo el proyecto (incluye pom.xml y subcarpetas)
+COPY . .
 
-# Dar permisos al mvnw (Render usa Linux)
-RUN chmod +x mvnw
+# Dar permisos al wrapper
+RUN chmod +x ./MolinaChirinosTP/mvnw
 
-# Construir el .jar sin tests
+# Construir el JAR usando la carpeta correcta
+WORKDIR /app/MolinaChirinosTP
 RUN ./mvnw -DskipTests package
 
 
@@ -18,12 +19,12 @@ FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-# Copiar el jar generado desde el builder
-COPY --from=builder /app/target/*.jar app.jar
+# Copiar el JAR generado desde el builder
+COPY --from=builder /app/MolinaChirinosTP/target/*.jar app.jar
 
-# Usar perfil por defecto
-ENV SPRING_PROFILES_ACTIVE=default
+# Activar perfil prod
+ENV SPRING_PROFILES_ACTIVE=prod
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java","-jar","/app/app.jar"]
