@@ -2,14 +2,11 @@
 FROM eclipse-temurin:17-jdk-alpine AS builder
 
 WORKDIR /app
+COPY . .
 
-# Copiar todo el proyecto
-COPY MolinaChirinosTP .
+RUN chmod +x ./MolinaChirinosTP/mvnw
 
-# Dar permisos al mvnw (Render usa Linux)
-RUN chmod +x mvnw
-
-# Construir el .jar sin tests
+WORKDIR /app/MolinaChirinosTP
 RUN ./mvnw -DskipTests package
 
 
@@ -18,12 +15,11 @@ FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-# Copiar el jar generado desde el builder
-COPY --from=builder /app/target/*.jar app.jar
+COPY --from=builder /app/MolinaChirinosTP/target/*.jar app.jar
 
-# Usar perfil por defecto
-ENV SPRING_PROFILES_ACTIVE=default
+ENV SPRING_PROFILES_ACTIVE=prod
 
+# Render mapea el puerto, NO SE DEBE SETEAR PORT MANUAL
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java","-jar","/app/app.jar"]
